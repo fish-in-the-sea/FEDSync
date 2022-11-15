@@ -1,7 +1,7 @@
 # FEDSync
 FEDSync is software designed to control the [FED3 Unit](https://github.com/KravitzLabDevices/FED3) over a serial connection
 
-<img src="https://github.com/cora-reef/FEDSync/blob/739e7d2429bd06c0ba4a3f5a44e0e874d1a3b4f6/photos/FED3Sync-UI.png" width="500em">
+<img src="https://github.com/cora-reef/FEDSync/blob/6855d8618207daa3d5228b3b8d4723c681748c1d/photos/FEDSync-UI.png" width="500em">
 
 ## Requirements
 FEDSync requires
