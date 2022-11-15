@@ -20,27 +20,8 @@ def time_stamp():
     """
     return datetime.datetime.now().time().isoformat("milliseconds")
 
+timeoff = 0.14936585262626167
 
-headers = (
-    ",".join([
-        "MM:DD:YYYY hh:mm:ss",
-        "LibaryVersion_Sketch",
-        "Device_Number",
-        "Battery_Voltage",
-        "Motor_Turns",
-        "Trial_Info",
-        "FR",
-        "Event",
-        "Active_Poke",
-        "Left_Poke_Count",
-        "Right_Poke_Count",
-        "Pellet_Count",
-        "Block_Pellet_Count",
-        "Retrieval_Time",
-        "Poke_Time",
-    ])
-    + "\n"
-)
 """
 Headers for the CSV exported for the FED3 unit
 """
@@ -133,6 +114,14 @@ class Serial_Manager:
         self.serial.write(bytes(f"{datetime.datetime.now().isoformat()}\0", "utf-8"))
         output = self.serial.read_until(b"\0").decode("utf-8")
         self.next()  # allow the next tiem to queue
+        return output
+
+    def get_headers(self):
+        self.wait()
+        self.serial.write(b'Headers\0')
+        output  = self.serial.read_until(b"\0").decode("utf-8").strip('\0')
+        output += self.serial.read_until(b"\0").decode("utf-8").strip('\0')
+        self.next()
         return output
 
     def reset_fed(self):
@@ -265,7 +254,8 @@ class Backend(QObject):
                 self.serial.reset_fed()
                 filename = next_file(self.file_name)
                 self.file = open(filename, "w")
-                self.file.write(headers)
+                header = self.serial.get_headers()
+                self.file.write(header + '\n')
         else:
             self.file.flush()
             self.file.close()
@@ -305,7 +295,10 @@ def watch_serial(backend, exit):
                 if output != None:
                     backend.console_log(output)
                     if backend.recording and backend.file:
-                        backend.file.write(output.strip("\0"))
+                        output = output.strip('\0').strip('\n')
+                        stamp = datetime.datetime.timestamp(datetime.datetime.now())
+                        output = ','.join([str(stamp - timeoff/2)] + output.split(',')[1:])
+                        backend.file.write(output)
 
     if backend.serial != None:
         backend.serial.close()
