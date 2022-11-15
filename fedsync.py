@@ -22,9 +22,6 @@ def time_stamp():
 
 timeoff = 0.14936585262626167
 
-"""
-Headers for the CSV exported for the FED3 unit
-"""
 
 
 def get_avalible_ports():
