@@ -28,7 +28,7 @@ def get_avalible_ports():
     """
     Gets a list of all active serial
     """
-    return [port for port, *_ in list_ports.comports() if port not in ["COM3"]]
+    return [port for port, *_ in list_ports.comports()]
 
 
 def ids():
