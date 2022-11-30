@@ -116,8 +116,8 @@ class Serial_Manager:
     def get_headers(self):
         self.wait()
         self.serial.write(b'Headers\0')
-        output  = self.serial.read_until(b"\0").decode("utf-8").strip('\0')
-        output += self.serial.read_until(b"\0").decode("utf-8").strip('\0')
+        output  = self.serial.read_until(b"\0\0").decode("utf-8").strip('\0')
+        output += self.serial.read_until(b"\0\0").decode("utf-8").strip('\0')
         self.next()
         return output
 
