@@ -37,8 +37,8 @@ def fetch_data(data_x,data_y):
     with open('timeing.csv','w') as file:
         file.write("Number of Characters, Time (s)\n")
         time.sleep(1)
-        for n in range(1,100):
-            for i in range(100):
+        for n in range(1,100,10):
+            for i in range(10):
                 timer = echo(mySerial)
                 
                 data_x.append(n)
