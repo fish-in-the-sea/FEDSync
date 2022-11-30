@@ -289,10 +289,10 @@ def watch_serial(backend, exit):
         if backend.serial != None:
             if backend.serial.is_availible():
                 output = backend.serial.read()
-                if output != None:
+                output = output.strip('\0').strip('\n')
+                if output: #prevents blank lines from being read
                     backend.console_log(output)
                     if backend.recording and backend.file:
-                        output = output.strip('\0').strip('\n')
                         stamp = datetime.datetime.timestamp(datetime.datetime.now())
                         output = ','.join([str(stamp - timeoff/2)] + output.split(',')[1:])
                         backend.file.write(output)
