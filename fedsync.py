@@ -11,6 +11,16 @@ from PyQt5.QtWidgets import QApplication
 from serial.tools import list_ports
 
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 def time_stamp():
     """
     Generates a time stamp to use in logging
@@ -65,6 +75,7 @@ class Serial_Manager:
         self.serial = serial.Serial(self.port, 57600, timeout=2)
         self.call_queue = queue.Queue()
         self.uuid_gen = ids()
+        
 
     def wait(self):
         """
@@ -190,8 +201,10 @@ class Backend(QObject):
         self.port = self.ports[port]
         if self.serial and self.serial.port != self.port:
             self.serial.close()
-            self.serial = Serial_Manager(self.port)
-
+            if self.port == "select port":
+                self.serial = None
+            else:
+                self.serial = Serial_Manager(self.port)
     @pyqtSlot()
     def get_file(self):
         """
@@ -267,7 +280,10 @@ class Backend(QObject):
         self.engine.rootObjects()[0].setProperty("options", options)
         if len(options):
             self.port = options[0]
-            self.serial = Serial_Manager(self.port)
+            if self.port == "select port":
+                self.serial = None
+            else:
+                self.serial = Serial_Manager(self.port)
 
     def console_log(self, msg):
         """
@@ -310,13 +326,13 @@ def main():
 
     engine = QQmlApplicationEngine()
     engine.quit.connect(app.quit)
-    engine.load("srcs/main.qml")
+    engine.load(resource_path("srcs/main.qml"))
     #loads QML into the python to start the GUI
 
     backend = Backend(engine)
     #Attaches the Backend to the engine
 
-    backend.set_options(get_avalible_ports())
+    backend.set_options(["select port"] + get_avalible_ports())
     #Connects Ports to Backend
 
     running = [True]

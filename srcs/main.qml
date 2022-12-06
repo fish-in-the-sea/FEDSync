@@ -25,12 +25,14 @@ ApplicationWindow {
     Settings {
         id: settings
         property string file_url: ""
+        property int port: 0
     }
 
     Connections { 
         target: backend
         function onLoad() {
             backend.set_file(settings.file_url);
+            myBox.currentIndex = settings.port;
         }
 
     }
@@ -71,6 +73,14 @@ ApplicationWindow {
 
                         onActivated: {
                             backend.set_port(currentIndex);
+                        }
+
+                        delegate: ItemDelegate { 
+                            text: myBox.model[index];
+                            highlighted: ListView.isCurrentItem
+                            width: parent.width
+                            height: index != 0 && index != myBox.currentIndex ? myBox.height : 0;
+                            enabled: index != 0 && index != myBox.currentIndex;
                         }
 
                     }
