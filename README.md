@@ -15,7 +15,7 @@ Windows has a bundled executable which can be downloaded from releases.
 
 
 ## Arduino Setup
-A [custom library](https://github.com/cora-reef/FED3_library) for the FED3 device is currently required.
+A [custom library](https://github.com/cora-reef/FED3_library) for the FED3 device is currently required. (being added to main library)
 
 
 ## How to Use
