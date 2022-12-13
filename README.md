@@ -1,7 +1,7 @@
 # FEDSync
 FEDSync is software designed to control the [FED3 Unit](https://github.com/KravitzLabDevices/FED3) over a serial connection
 
-<img src="https://github.com/cora-reef/FEDSync/blob/6855d8618207daa3d5228b3b8d4723c681748c1d/photos/FEDSync-UI.png" width="500em">
+<img src="https://github.com/cora-reef/FEDSync/blob/master/photos/FEDSync-UI.png" width="500em">
 
 ## Requirements
 ### Linux
@@ -24,11 +24,12 @@ A [custom library](https://github.com/cora-reef/FED3_library) for the FED3 devic
 3. You will need to modify the your experiments code to expose the library modifications to serial
 Using the ClassicFED3 example code as a base
 We will add the RTC Clock header to the includes
+4. When running experiments, once the mode is selected to use use FEDSync to configure and start the recording, then preform a left poke to move the fed device out of a wait mode.
 
 ```cpp
 #include "RTClib.h"
 ```
-<img src="https://github.com/cora-reef/FEDSync/blob/630ab35b1fbb30ba1ebb1ad6f0fecc5fc9db10b9/photos/header.png" width="">
+<img src="https://github.com/cora-reef/FEDSync/blob/master/photos/header.png" width="">
 
 Then we will modify the `setup` function to enable the serial functions
 ```cpp
@@ -39,7 +40,7 @@ void setup() {
   Serial.begin(57600);
 }
 ```
-<img src="https://github.com/cora-reef/FEDSync/blob/630ab35b1fbb30ba1ebb1ad6f0fecc5fc9db10b9/photos/setup.png" width="">
+<img src="https://github.com/cora-reef/FEDSync/blob/master/photos/setup.png" width="">
 
 Adding a function to parse commands sent by FEDSync
 ```cpp
@@ -67,12 +68,16 @@ void parse_command() {
 }
 ```
 
+<img src="https://github.com/cora-reef/FEDSync/blob/master/photos/parse.png" width="">
+
+
 Before we decalre `loop` we are going to add a boolean that will to wait for the fed device to be used.
 ```cpp
 bool started = false;
 void loop() {...
 ```
 
+<img src="https://github.com/cora-reef/FEDSync/blob/master/photos/globals.png" width="">
 
 Lastly modify the `loop` to wait for a left poke before starting the device, this will let us talk to the device before we start the experiment
 ```cpp
@@ -83,4 +88,4 @@ void loop() {
   }
   ...
 ```
-<img src="https://github.com/cora-reef/FEDSync/blob/630ab35b1fbb30ba1ebb1ad6f0fecc5fc9db10b9/photos/loop.png" width="">
+<img src="https://github.com/cora-reef/FEDSync/blob/master/photos/loop.png" width="">
