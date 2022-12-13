@@ -4,10 +4,19 @@ FEDSync is software designed to control the [FED3 Unit](https://github.com/Kravi
 <img src="https://github.com/cora-reef/FEDSync/blob/6855d8618207daa3d5228b3b8d4723c681748c1d/photos/FEDSync-UI.png" width="500em">
 
 ## Requirements
-FEDSync requires
+### Linux
+For Linux you will need to download and run the python source code. 
+Python Modules needed
 1. `pyqt5`
 2. `pySerial`
-3. And a currently [custom library](https://github.com/cora-reef/FED3_library) for the FED3 device
+
+### Windows
+Windows has a bundled executable which can be downloaded from releases.
+
+
+## Arduino Setup
+A [custom library](https://github.com/cora-reef/FED3_library) for the FED3 device is currently required.
+
 
 ## How to Use
 1. Follow the installation guide for the FED3 library from the main github.
