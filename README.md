@@ -41,22 +41,45 @@ void setup() {
 ```
 <img src="https://github.com/cora-reef/FEDSync/blob/630ab35b1fbb30ba1ebb1ad6f0fecc5fc9db10b9/photos/setup.png" width="">
 
-Lastly modify the `loop` function to check and use the serial connection
+Adding a function to parse commands sent by FEDSync
 ```cpp
-void loop() {
+void parse_command() {
   while(Serial.available()) {
-    String command =  Serial.readStringUntil('\0');
-    if(command == "Time") {
+    String command = Serial.readStringUntil('\0');
+    if(command == "Reset"){
+      fed3.rest_vars();
+
+    } else if(command == "Headers") {
+      fed3.sendHeaders();
+
+    } else if(command == "Time") {
       char time[100];
       Serial.readStringUntil('\0').toCharArray(time, 99);
       rtc.adjust(DateTime(time));
       Serial.print(time);
-    } else if(command == "Reset") {
-      fed3.rest_vars();
-    } else if(command == "Headers"){
-      fed3.sendHeaders();
+      Serial.write((byte)0);
+
+    } else {
+      Serial.print(command);
+      Serial.write((byte)0);
     }
-    Serial.print('\0');
+  }
+}
+```
+
+Before we decalre `loop` we are going to add a boolean that will to wait for the fed device to be used.
+```cpp
+bool started = false;
+void loop() {...
+```
+
+
+Lastly modify the `loop` to wait for a left poke before starting the device, this will let us talk to the device before we start the experiment
+```cpp
+void loop() {
+  while(!started) {
+    parse_command();
+    if(fed3.Left) started = true;
   }
   ...
 ```
